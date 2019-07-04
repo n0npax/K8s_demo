@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  labels:
+    opa: "deployment-annotations"
+  name: {{ .Values.name }}-app-deployment-annotation
+  namespace: {{ .Values.namespace }}
+data:
+  deployment-annotation.rego: >-
+{{ .Files.Get "rego/app-deployment-annotations.rego" | nindent 4 }}
+

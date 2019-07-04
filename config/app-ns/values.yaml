@@ -1,0 +1,6 @@
+apps:
+  roullete:
+    - dev
+    - qa
+    - stg
+    - prod

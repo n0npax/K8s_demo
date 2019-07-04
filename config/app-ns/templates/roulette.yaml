@@ -1,0 +1,21 @@
+{{- range $app_name, $app := .Values.apps }}
+{{- range $env := $app }}
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: app-{{ $app_name }}-{{ $env }}
+---
+apiVersion: v1
+kind: LimitRange
+metadata:
+  name: app-limit-range
+  namespace: app-{{ $app_name }}-{{ $env }}
+spec:
+  limits:
+  - default:
+      cpu: 0.5
+      memory: 256Mi
+    type: Container
+{{- end }}
+{{- end }}

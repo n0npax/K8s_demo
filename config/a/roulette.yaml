@@ -1,0 +1,17 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: app-roulette
+---
+apiVersion: v1
+kind: LimitRange
+metadata:
+  name: app-limit-range
+  namespace: app-roulette
+spec:
+  limits:
+  - default:
+      cpu: 0.5
+      memory: 256Mi
+    type: Container
