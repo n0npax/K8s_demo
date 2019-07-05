@@ -21,7 +21,7 @@ istio: istio-$(ISTIO_VERSION)
 	helm template istio-$(ISTIO_VERSION)/install/kubernetes/helm/istio --name istio --namespace istio-system --values istio-$(ISTIO_VERSION)/install/kubernetes/helm/istio/values-istio-demo.yaml | kubectl apply -f -
 
 
-COMPONENT := spinnaker opa
+COMPONENT := spinnaker opa sealed-secrets
 .PHONY: $(COMPONENT)
 $(COMPONENT):
 	kubectl apply -f $@/ns.yaml 
