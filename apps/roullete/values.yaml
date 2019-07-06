@@ -5,13 +5,21 @@ apps:
     image:
       name: roullete:latest
       policy: Never
-    command: '["/usr/local/bin/random-field"]'
-    args: '["--url", "http://roullete-random-num:8000/api/v1/random/int/", "--port", "80"]'
+    command: '["/app/roullete-random-field-app.py"]'
+    args: '["--colour-api", "http://roullete-field-colour:8000/api/v1/colour","--random-num-api", "http://roullete-random-num:8000/api/v1/random/float/", "--port", "80"]'
     port: 80
   roullete-random-num:    
     image:
       name: roullete:latest
       policy: Never
-    command: '["/usr/local/bin/random-num"]'
+    command: '["/app/roullete-random-num-app.py"]'
     args: '["--port", "80"]'
     port: 80
+  roullete-field-colour:
+    image:
+      name: roullete:latest
+      policy: Never
+    command: '["/app/roullete-colour-app.py"]'
+    args: '["--port", "80"]'
+    port: 80
+
