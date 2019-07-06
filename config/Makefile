@@ -16,9 +16,13 @@ istio-$(ISTIO_VERSION):
 .PHONY: istio
 istio: istio-$(ISTIO_VERSION)
 	kubectl apply -f istio/ns.yaml
-	helm template istio-$(ISTIO_VERSION)/install/kubernetes/helm/istio-init --name istio-init --namespace istio-system | kubectl apply -f -
+	helm template istio-$(ISTIO_VERSION)/install/kubernetes/helm/istio-init --name istio-init --namespace istio-system \
+		| kubectl apply -f -
 	while [ $(shell kubectl get crds | grep 'istio.io\|certmanager.k8s.io' | wc -l) -lt 22 ]; do echo waiting for istio; sleep 1; done
-	helm template istio-$(ISTIO_VERSION)/install/kubernetes/helm/istio --name istio --namespace istio-system --values istio-$(ISTIO_VERSION)/install/kubernetes/helm/istio/values-istio-demo.yaml | kubectl apply -f -
+	helm template istio-$(ISTIO_VERSION)/install/kubernetes/helm/istio --name istio --namespace istio-system \
+		--values istio-$(ISTIO_VERSION)/install/kubernetes/helm/istio/values-istio-demo.yaml \
+		--set tracing.enabled=true --set tracing.provider=zipkin \
+		| kubectl apply -f -
 
 
 COMPONENT := spinnaker opa sealed-secrets
@@ -34,3 +38,9 @@ opa-policies:
 .PHONY: app-ns
 app-ns:
 	helm template app-ns | kubectl apply -f -
+
+gateway:
+	export INGRESS_PORT=$(kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.spec.ports[?(@.name=="http2")].nodePort}')
+	export SECURE_INGRESS_PORT=$(kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.spec.ports[?(@.name=="https")].nodePort}')
+	export INGRESS_HOST=$(minikube ip)
+

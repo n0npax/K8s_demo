@@ -1,0 +1,75 @@
+{{- $root := . -}}
+{{- range $app_name, $app := .Values.apps}}
+
+#
+---
+#virtual svc
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: {{$app_name}}
+  namespace: {{$root.Values.namespace}}
+spec:
+  hosts:
+  - "{{ $app_name}}.{{ $root.Values.namespace }}.minikube"
+  gateways:
+  - roullete-gateway
+  http:
+  - match:
+    - uri:
+        prefix: /
+    route:
+    - destination:
+        port:
+          number: 8000
+        host: {{$app_name}}
+
+#
+---
+#svc
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: {{$app_name}}
+  name: {{$app_name}}
+  namespace: {{$root.Values.namespace}}
+spec:
+  ports:
+  - name: http
+    port: 8000
+    targetPort: 80
+  selector:
+    app: {{$app_name}}
+
+#
+---
+# deployment
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app: {{$app_name}}
+  name: {{$app_name}}
+  namespace: {{$root.Values.namespace}}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{$app_name}}
+  template:
+    metadata:
+      labels:
+        app: {{$app_name}}
+    spec:
+      containers:
+      - image: {{$app.image.name}}
+        imagePullPolicy: {{$app.image.policy}}
+        command: {{$app.command}}
+        args: {{$app.args}}
+        name: {{$app_name}}
+        ports:
+        - containerPort: {{$app.port}}
+
+#
+{{- end -}}

@@ -1,0 +1,17 @@
+---
+namespace: app-roullete-dev
+apps:
+  roullete-random-field:    
+    image:
+      name: roullete:latest
+      policy: Never
+    command: '["/usr/local/bin/random-field"]'
+    args: '["--url", "http://roullete-random-num:8000/api/v1/random/int/", "--port", "80"]'
+    port: 80
+  roullete-random-num:    
+    image:
+      name: roullete:latest
+      policy: Never
+    command: '["/usr/local/bin/random-num"]'
+    args: '["--port", "80"]'
+    port: 80
