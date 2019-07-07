@@ -1,4 +1,19 @@
 ---
+redis:
+  password: bets
+  cluster:
+    slaveCount: 0
+    enabled: false
+  sentinel:
+    securityContext:
+      enabled: false
+
+mongodb:
+  mongodbUsername: bets
+  mongodbPassword: bets
+  mongodbDatabase: bets
+
+
 namespace: app-roullete-dev
 apps:
   roullete-random-field:    
@@ -22,4 +37,17 @@ apps:
     command: '["/app/roullete-colour-app.py"]'
     args: '["--port", "80"]'
     port: 80
-
+  roullete-bet:
+    image:
+      name: roullete:latest
+      policy: Never
+    command: '["/app/roullete-bet-app.py"]'
+    args: '["--port", "80", "--mongo-endpoint", "roullete-mongodb:27017", "--redis-endpoint", "roullete-redis-master"]'
+    port: 80
+  roullete-spin:
+    image:
+      name: roullete:latest
+      policy: Never
+    command: '["/app/roullete-spin-app.py"]'
+    args: '["--port", "80", "--redis-endpoint", "roullete-redis-master", "--random-field-api", "http://roullete-random-field:8000/api/v1/random/field/"]'
+    port: 80

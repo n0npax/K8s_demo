@@ -4,7 +4,6 @@ apiVersion: networking.istio.io/v1alpha3
 kind: Gateway
 metadata:
   name: roullete-gateway
-  namespace: {{.Values.namespace}}
 spec:
   selector:
     istio: ingressgateway

@@ -8,7 +8,6 @@ apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
   name: {{$app_name}}
-  namespace: {{$root.Values.namespace}}
 spec:
   hosts:
   - "{{ $app_name}}.{{ $root.Values.namespace }}.minikube"
@@ -33,7 +32,6 @@ metadata:
   labels:
     app: {{$app_name}}
   name: {{$app_name}}
-  namespace: {{$root.Values.namespace}}
 spec:
   ports:
   - name: http
@@ -51,7 +49,6 @@ metadata:
   labels:
     app: {{$app_name}}
   name: {{$app_name}}
-  namespace: {{$root.Values.namespace}}
 spec:
   replicas: 1
   selector:
