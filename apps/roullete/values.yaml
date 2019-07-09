@@ -49,5 +49,12 @@ apps:
       name: roullete:latest
       policy: Never
     command: '["/app/roullete-spin-app.py"]'
-    args: '["--port", "80", "--redis-endpoint", "roullete-redis-master", "--random-field-api", "http://roullete-random-field:8000/api/v1/random/field/"]'
+    args: '["--port", "80", "--payout-api", "http://roullete-payout:8000/api/v1/payout/" ,"--redis-endpoint", "roullete-redis-master", "--random-field-api", "http://roullete-random-field:8000/api/v1/random/field/"]'
+    port: 80
+  roullete-payout:
+    image:
+      name: roullete:latest
+      policy: Never
+    command: '["/app/roullete-payout-app.py"]'
+    args: '["--port", "80", "--redis-endpoint", "roullete-redis-master", "--mongo-endpoint", "roullete-mongodb:27017"]'
     port: 80

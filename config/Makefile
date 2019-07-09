@@ -16,6 +16,7 @@ istio-$(ISTIO_VERSION):
 .PHONY: istio
 istio: istio-$(ISTIO_VERSION)
 	kubectl apply -f istio/ns.yaml
+	kubectl apply -f istio/mesh-policy.yaml
 	helm template istio-$(ISTIO_VERSION)/install/kubernetes/helm/istio-init --name istio-init --namespace istio-system \
 		| kubectl apply -f -
 	while [ $(shell kubectl get crds | grep 'istio.io\|certmanager.k8s.io' | wc -l) -lt 22 ]; do echo waiting for istio; sleep 1; done
