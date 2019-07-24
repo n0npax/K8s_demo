@@ -8,9 +8,12 @@ roullete: namespace
 delete:
 	helm template roullete --name roullete | kubectl delete -n $(NAMESPACE) -f -
 
+INGRESS_HOST=$(shell minikube ip)
+INGRESS_PORT=$(shell kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.spec.ports[?(@.name=="http2")].nodePort}')
+SECURE_INGRESS_PORT=$(shell kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.spec.ports[?(@.name=="https")].nodePort}')
 
 test:
-	@curl  -HHost:roullete-random-field.app-roullete-dev.minikube http://$$INGRESS_HOST:$$INGRESS_PORT/api/v1/random/field/
-	@curl -X POST  -HHost:roullete-bet.app-roullete-dev.minikube http://$$INGRESS_HOST:$$INGRESS_PORT/api/v1/bet/ -d '{}' -H "Content-Type: application/json"
-	@curl -X POST -HHost:roullete-spin.app-roullete-dev.minikube http://$$INGRESS_HOST:$$INGRESS_PORT/api/v1/spin/
+	@curl  -HHost:roullete-random-field.app-roullete-dev.minikube http://$(INGRESS_HOST):$(INGRESS_PORT)/api/v1/random/field/
+	@curl -X POST  -HHost:roullete-bet.app-roullete-dev.minikube http://$(INGRESS_HOST):$(INGRESS_PORT)/api/v1/bet/ -d '{}' -H "Content-Type: application/json"
+	@curl -X POST -HHost:roullete-spin.app-roullete-dev.minikube http://$(INGRESS_HOST):$(INGRESS_PORT)/api/v1/spin/
 
