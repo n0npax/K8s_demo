@@ -16,42 +16,42 @@ mongodb:
 
 namespace: app-roullete-dev
 apps:
-  roullete-random-field:    
+  random-field:    
     image:
       name: roullete:latest
       policy: Never
     command: '["/app/roullete-random-field-app.py"]'
-    args: '["--colour-api", "http://roullete-field-colour:8000/api/v1/colour","--random-num-api", "http://roullete-random-num:8000/api/v1/random/float/", "--port", "80"]'
+    args: '["--colour-api", "http://field-colour:8000/api/v1/colour","--random-num-api", "http://random-num:8000/api/v1/random/float/", "--port", "80"]'
     port: 80
-  roullete-random-num:    
+  random-num:    
     image:
       name: roullete:latest
       policy: Never
     command: '["/app/roullete-random-num-app.py"]'
     args: '["--port", "80"]'
     port: 80
-  roullete-field-colour:
+  field-colour:
     image:
       name: roullete:latest
       policy: Never
     command: '["/app/roullete-colour-app.py"]'
     args: '["--port", "80"]'
     port: 80
-  roullete-bet:
+  bet:
     image:
       name: roullete:latest
       policy: Never
     command: '["/app/roullete-bet-app.py"]'
-    args: '["--port", "80", "--mongo-endpoint", "roullete-mongodb:27017", "--redis-endpoint", "roullete-redis-master"]'
+    args: '["--colour-api", "http://field-colour:8000/api/v1/colour", "--port", "80", "--mongo-endpoint", "roullete-mongodb:27017", "--redis-endpoint", "roullete-redis-master"]'
     port: 80
-  roullete-spin:
+  spin:
     image:
       name: roullete:latest
       policy: Never
     command: '["/app/roullete-spin-app.py"]'
-    args: '["--port", "80", "--payout-api", "http://roullete-payout:8000/api/v1/payout/" ,"--redis-endpoint", "roullete-redis-master", "--random-field-api", "http://roullete-random-field:8000/api/v1/random/field/"]'
+    args: '["--port", "80", "--payout-api", "http://payout:8000/api/v1/payout/" ,"--redis-endpoint", "roullete-redis-master", "--random-field-api", "http://random-field:8000/api/v1/random/field/"]'
     port: 80
-  roullete-payout:
+  payout:
     image:
       name: roullete:latest
       policy: Never
