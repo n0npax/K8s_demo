@@ -38,6 +38,7 @@ apps:
     args: '["--port", "80"]'
     port: 80
   bet:
+    expose: true
     image:
       name: roullete:latest
       policy: Never
@@ -45,6 +46,7 @@ apps:
     args: '["--colour-api", "http://field-colour:8000/api/v1/colour", "--port", "80", "--mongo-endpoint", "roullete-mongodb:27017", "--redis-endpoint", "roullete-redis-master"]'
     port: 80
   spin:
+    expose: true
     image:
       name: roullete:latest
       policy: Never

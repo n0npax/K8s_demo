@@ -3,6 +3,7 @@
 
 #
 ---
+{{ if $app.expose }} 
 #virtual svc
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
@@ -22,8 +23,8 @@ spec:
         port:
           number: 8000
         host: {{$app_name}}
-
 #
+{{ end }}
 ---
 #svc
 apiVersion: v1
