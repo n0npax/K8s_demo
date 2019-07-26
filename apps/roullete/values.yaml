@@ -58,5 +58,14 @@ apps:
       name: roullete:latest
       policy: Never
     command: '["/app/roullete-payout-app.py"]'
-    args: '["--port", "80", "--redis-endpoint", "roullete-redis-master", "--mongo-endpoint", "roullete-mongodb:27017"]'
+    args: '["--port", "80", "--redis-endpoint", "roullete-redis-master", "--mongo-endpoint", "roullete-mongodb:27017", "--cash-api", "http://cash:8000/api/v1/cash/"]'
     port: 80
+  cash:
+    expose: true
+    image:
+      name: roullete:latest
+      policy: Never
+    command: '["/app/roullete-cash-app.py"]'
+    args: '["--port", "80", "--redis-endpoint", "roullete-redis-master"]'
+    port: 80
+

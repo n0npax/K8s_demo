@@ -16,4 +16,5 @@ test:
 	@curl -X POST -HHost:bet.app-roullete-dev.minikube http://$(INGRESS_HOST):$(INGRESS_PORT)/api/v1/bet/ -d '{}' -H "Content-Type: application/json"
 	@curl -X POST -HHost:bet.app-roullete-dev.minikube http://$(INGRESS_HOST):$(INGRESS_PORT)/api/v1/bet/ -d '{"user": "n0npax", "field": 11, "amount": 33}' -H "Content-Type: application/json"
 	@curl -X POST -HHost:spin.app-roullete-dev.minikube http://$(INGRESS_HOST):$(INGRESS_PORT)/api/v1/spin/
-
+	@curl -X GET -HHost:cash.app-roullete-dev.minikube http://$(INGRESS_HOST):$(INGRESS_PORT)/api/v1/cash/
+	
