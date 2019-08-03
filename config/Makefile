@@ -6,7 +6,6 @@ requirements:
 	helm init --service-account tiller
 	helm init --upgrade --service-account tiller
 	kubectl --namespace kube-system get pods | grep tiller
-	#helm install stable/opa
 
 ISTIO_VERSION=1.2.0
 istio-$(ISTIO_VERSION):
@@ -16,7 +15,6 @@ istio-$(ISTIO_VERSION):
 .PHONY: istio
 istio: istio-$(ISTIO_VERSION)
 	kubectl apply -f istio/ns.yaml
-	kubectl apply -f istio/mesh-policy.yaml
 	helm template istio-$(ISTIO_VERSION)/install/kubernetes/helm/istio-init --name istio-init --namespace istio-system \
 		| kubectl apply -f -
 	while [ $(shell kubectl get crds | grep 'istio.io\|certmanager.k8s.io' | wc -l) -lt 22 ]; do echo waiting for istio; sleep 1; done
@@ -24,6 +22,7 @@ istio: istio-$(ISTIO_VERSION)
 		--values istio-$(ISTIO_VERSION)/install/kubernetes/helm/istio/values-istio-demo.yaml \
 		--set tracing.enabled=true --set tracing.provider=zipkin \
 		| kubectl apply -f -
+	kubectl apply -f istio/mesh-policy.yaml
 
 
 COMPONENT := spinnaker opa sealed-secrets
